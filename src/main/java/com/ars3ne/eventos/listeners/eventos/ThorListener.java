@@ -46,7 +46,7 @@ public class ThorListener implements Listener {
 
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getEntity())) return;
-        if(e.getEntity().getLastDamageCause().getCause() != EntityDamageEvent.DamageCause.LIGHTNING) return;
+        // if(!(e.getEntity().getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.LIGHTNING || e.getEntity().getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.FIRE)) return;
 
         // Remova o jogador do evento.
         e.getEntity().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));

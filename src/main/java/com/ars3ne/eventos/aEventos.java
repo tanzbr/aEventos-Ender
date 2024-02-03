@@ -110,6 +110,7 @@ public class aEventos extends JavaPlugin {
                 this.getServer().getMessenger().registerOutgoingPluginChannel(this, "aeventos:channel");
                 this.getServer().getMessenger().registerIncomingPluginChannel(this, "aeventos:channel", new BungeecordHook());
             }
+            this.getServer().getMessenger().registerOutgoingPluginChannel(this, "aeventos:channel");
 
             this.getCommand("evento").setExecutor(new EventoCommand());
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aPlugin iniciado com sucesso!");

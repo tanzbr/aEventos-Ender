@@ -29,6 +29,7 @@ package com.ars3ne.eventos.commands;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
+import com.ars3ne.eventos.endermod.SyncVelocity;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.manager.InventoryManager;
 import com.ars3ne.eventos.manager.InventorySerializer;
@@ -73,6 +74,7 @@ public class EventoCommand implements CommandExecutor {
 
                         if(!aEventos.getInstance().getConfig().getBoolean("Show commands")) return true;
                     }
+
 
                     // Se tiver a permissão de admin, então mande os comandos de admin.
                     if(sender.hasPermission("aeventos.admin")) {
@@ -134,6 +136,12 @@ public class EventoCommand implements CommandExecutor {
                             }
                         }
 
+                    }
+
+                    // double verification, always check if player inventory is empty
+                    if(Utils.isInventoryFull(p)) {
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§")));
+                        return true;
                     }
 
                     // Entre no evento.
@@ -256,9 +264,14 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     List<String> broadcast_messages = config.getStringList("Messages.Cancelled");
+                    SyncVelocity.sendStopSignal();
+
+                    List<String> formattedMessages = new ArrayList<>();
                     for(String s : broadcast_messages) {
+                        formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                         aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                     }
+                    SyncVelocity.sendMessageVelocity(formattedMessages);
 
                     return true;
 

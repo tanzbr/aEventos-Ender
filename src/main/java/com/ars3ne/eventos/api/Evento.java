@@ -29,6 +29,7 @@ package com.ars3ne.eventos.api;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.*;
+import com.ars3ne.eventos.endermod.SyncVelocity;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.manager.InventoryManager;
 import com.ars3ne.eventos.manager.InventorySerializer;
@@ -138,9 +139,13 @@ public class Evento implements EventoInterface{
                     }
 
                     List<String> broadcast_messages = config.getStringList("Messages.Broadcast");
+                    SyncVelocity.sendStartSignal();
+                    List<String> formattedMessages = new ArrayList<>();
                     for(String s : broadcast_messages) {
+                        formattedMessages.add(s.replace("@players", String.valueOf(Evento.this.players.size())).replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@money", NumberFormatter.letterFormat(money)));
                         aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@players", String.valueOf(Evento.this.players.size())).replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title"))).replace("@money", NumberFormatter.letterFormat(money)));
                     }
+                    SyncVelocity.sendMessageVelocity(formattedMessages);
 
                     calls--;
                 }else if(Evento.this.happening){
@@ -149,9 +154,13 @@ public class Evento implements EventoInterface{
                         Evento.this.open = false;
 
                         List<String> broadcast_messages = config.getStringList("Messages.Start");
-                        for(String s : broadcast_messages) {
+                        SyncVelocity.sendStopSignal();
+                        List<String> formattedMessages = new ArrayList<>();
+                        for (String s : broadcast_messages) {
+                            formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                             aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                         }
+                        SyncVelocity.sendMessageVelocity(formattedMessages);
 
                         for (Player player : players) {
                             Evento.this.teleport(player, "entrance");
@@ -172,9 +181,13 @@ public class Evento implements EventoInterface{
                         }
 
                         List<String> broadcast_messages = config.getStringList("Messages.No players");
+                        SyncVelocity.sendStopSignal();
+                        List<String> formattedMessages = new ArrayList<>();
                         for(String s : broadcast_messages) {
+                            formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                             aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                         }
+                        SyncVelocity.sendMessageVelocity(formattedMessages);
 
                         Evento.this.stop();
 
@@ -191,9 +204,13 @@ public class Evento implements EventoInterface{
                 Evento.this.open = false;
 
                 List<String> broadcast_messages = config.getStringList("Messages.Start");
+                SyncVelocity.sendStopSignal();
+                List<String> formattedMessages = new ArrayList<>();
                 for(String s : broadcast_messages) {
+                    formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                     aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
+                SyncVelocity.sendMessageVelocity(formattedMessages);
 
                 for (Player player : players) {
                     Evento.this.teleport(player, "entrance");
@@ -207,9 +224,13 @@ public class Evento implements EventoInterface{
             } else {
 
                 List<String> broadcast_messages = config.getStringList("Messages.No players");
+                SyncVelocity.sendStopSignal();
+                List<String> formattedMessages = new ArrayList<>();
                 for(String s : broadcast_messages) {
+                    formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                     aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
+                SyncVelocity.sendMessageVelocity(formattedMessages);
 
                 Evento.this.stop();
 
@@ -227,9 +248,13 @@ public class Evento implements EventoInterface{
         Evento.this.open = false;
 
         List<String> broadcast_messages = config.getStringList("Messages.Start");
+        SyncVelocity.sendStopSignal();
+        List<String> formattedMessages = new ArrayList<>();
         for(String s : broadcast_messages) {
+            formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
             aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
         }
+        SyncVelocity.sendMessageVelocity(formattedMessages);
 
         for (Player player : players) {
             Evento.this.teleport(player, "entrance");
@@ -501,9 +526,12 @@ public class Evento implements EventoInterface{
 
         if(!this.open && players.size() == 0) {
             List<String> broadcast_messages = config.getStringList("Messages.No winner");
+            List<String> formattedMessages = new ArrayList<>();
             for(String s : broadcast_messages) {
+                formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                 aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
+            SyncVelocity.sendMessageVelocity(formattedMessages);
             this.stop();
         }
 
@@ -542,9 +570,12 @@ public class Evento implements EventoInterface{
 
         if(!this.open && players.size() == 0) {
             List<String> broadcast_messages = config.getStringList("Messages.No winner");
+            List<String> formattedMessages = new ArrayList<>();
             for(String s : broadcast_messages) {
+                formattedMessages.add(s.replace("@name", config.getString("Evento.Title")));
                 aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
+            SyncVelocity.sendMessageVelocity(formattedMessages);
             this.stop();
         }
 
